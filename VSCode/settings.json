@@ -1,5 +1,5 @@
 {
-    "workbench.startupEditor": "newUntitledFile",
+    "workbench.startupEditor": "none",
     "editor.minimap.enabled": false,
     "[razor]": {},
     "java.errors.incompleteClasspath.severity": "ignore",
@@ -15,7 +15,7 @@
         "**/.factorypath": true
     },
     "gitlens.hovers.enabled": false,
-    "telemetry.enableTelemetry": false,
+    "telemetry.telemetryLevel": "off",
     "editor.rulers": [100],
     "workbench.sideBar.location": "left",
     "git.enableCommitSigning": true,
