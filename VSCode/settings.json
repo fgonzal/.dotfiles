@@ -22,7 +22,7 @@
     "editor.suggestSelection": "first",
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "java.completion.overwrite": false,
-    "java.format.settings.url": "",
+    "java.format.settings.url": "https://raw.githubusercontent.com/fgonzal/.dotfiles/main/VSCode/java-formatter.xml",
     "editor.fontFamily": "JetBrains Mono, Cascadia Code, Menlo, Monaco, 'Courier New', monospace",
     "editor.fontSize": 13,
     "editor.tabCompletion": "on",
@@ -75,5 +75,6 @@
         "**/META-INF/maven/**"
     ],
     "tabnine.experimentalAutoImports": true,
-    "editor.wordWrapColumn": 100
+    "editor.wordWrapColumn": 100,
+    "java.format.settings.profile": "JavaConventions"
 }
