@@ -2,7 +2,15 @@
     "workbench.startupEditor": "none",
     "editor.minimap.enabled": false,
     "[razor]": {},
+    "java.project.resourceFilters": [],
+    "java.import.gradle.enabled": true,
+    "java.import.gradle.wrapper.enabled": true,
+    "java.import.maven.enabled": false,
+    "java.codeGeneration.useBlocks": true,
     "java.errors.incompleteClasspath.severity": "ignore",
+    "[java]": {
+        "editor.detectIndentation": false
+    },
     "workbench.statusBar.feedback.visible": false,
     "breadcrumbs.enabled": true,
     "editor.formatOnType": true,
@@ -24,13 +32,11 @@
     "java.completion.overwrite": false,
     "java.format.settings.url": "https://raw.githubusercontent.com/fgonzal/.dotfiles/main/VSCode/java-formatter.xml",
     "editor.fontFamily": "JetBrains Mono, Cascadia Code, Menlo, Monaco, 'Courier New', monospace",
-    "editor.fontSize": 14,
     "editor.tabCompletion": "on",
     "gitlens.statusBar.enabled": false,
     "editor.lineHeight": 24,
     "workbench.iconTheme": "material-icon-theme",
-    "java.codeGeneration.useBlocks": true,
-    "java.semanticHighlighting.enabled": true,
+
     "diffEditor.ignoreTrimWhitespace": false,
     "java.refactor.renameFromFileExplorer": "autoApply",
     "sonarlint.rules": {
@@ -45,18 +51,21 @@
     "java.import.gradle.home": "",
     // "java.import.gradle.version": "6.8.2",
     "java.import.gradle.offline.enabled": true,
-    // "java.import.gradle.java.home": "/Users/fgonzalez/.sdkman/candidates/java/current",
-    "java.import.gradle.java.home": "/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home",
+    "java.import.gradle.java.home": "/Users/fgonzalez/.sdkman/candidates/java/current",
+    // "java.import.gradle.java.home": "/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home",
     "java.jdt.ls.java.home": "/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home",
     "workbench.editor.wrapTabs": true,
     "terminal.explorerKind": "external",
     "terminal.external.osxExec": "iTerm.app",
     "workbench.colorCustomizations": {
-        "editorRuler.foreground": "#3a355396",
+        "editorRuler.foreground": "#2d2a4196",
         "statusBar.background": "#551d5c",
         "statusBar.foreground": "#bba4bd",
-        "editor.background": "#1a1a2c",
-        "sideBar.background": "#1D1D31",
+        // "editor.background": "#1a1a2c",
+        "editor.background": "#131320",
+        // "sideBar.background": "#1D1D31",
+        "sideBar.background": "#131320",
+        // "sideBar.border": "#2d3338",
         "activityBar.background": "#1D142B"
     },
     "redhat.telemetry.enabled": false,
@@ -77,5 +86,8 @@
     ],
     "tabnine.experimentalAutoImports": true,
     "editor.wordWrapColumn": 100,
-    "java.format.settings.profile": "JavaConventions"
+    "java.format.settings.profile": "JavaConventions",
+    "terminal.integrated.defaultProfile.osx": "bash",
+    "editor.fontSize": 13,
+    "html.format.wrapLineLength": 100
 }
