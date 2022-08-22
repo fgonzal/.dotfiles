@@ -35,6 +35,10 @@ set ignorecase
 set smartcase
 set incsearch
 
+" Change the direction of new splits.
+set splitbelow
+set splitright
+
 set clipboard=unnamedplus
 set background=dark
 nnoremap <SPACE> <Nop>
