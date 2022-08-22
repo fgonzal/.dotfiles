@@ -30,6 +30,11 @@ set backupdir=~/.config/nvim/backup//
 set directory=~/.config/nvim/swap//
 set undodir=~/.config/nvim/undo//
 
+" Use smartcase when searching within a file.
+set ignorecase
+set smartcase
+set incsearch
+
 set clipboard=unnamedplus
 set background=dark
 nnoremap <SPACE> <Nop>
@@ -56,8 +61,6 @@ Plug 'preservim/nerdtree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-snippets'
 Plug 'tpope/vim-fugitive'
-" #Plug 'vim-airline/vim-airline'
-" #Plug 'vim-airline/vim-airline-themes'
 Plug 'tomtom/tcomment_vim'
 
 " Themes
@@ -155,6 +158,7 @@ set statusline+=\
 
 map <C-n> :NERDTreeToggle<CR>
 
+
 " autocmd vimenter * ++nested colorscheme gruvbox
 autocmd VimEnter * hi Normal ctermbg=NONE guibg=NONE
 highlight Normal     ctermbg=NONE guibg=NONE
@@ -168,7 +172,21 @@ source $HOME/.config/nvim/plug-config/coc.vim
 
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 inoremap <silent><expr> <C-x><C-z> coc#pum#visible() ? coc#pum#stop() : "\<C-x>\<C-z>"
+" remap for complete to use tab and <cr>
+" inoremap <silent><expr> <TAB>
+"             \ coc#pum#visible() ? coc#pum#next(1):
+"             \ <SID>check_back_space() ? "\<Tab>" :
+"             \ coc#refresh()
+" inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr> <c-space> coc#refresh()
 
 hi CocSearch ctermfg=12 guifg=#18A3FF
 hi CocMenuSel ctermbg=109 guibg=#13354A
+
+" Remaps to move lines around.
+nnoremap <c-j> :m .+1<CR>==
+nnoremap <c-k> :m .-2<CR>==
+" inoremap <c-j> <Esc>:m .+1<CR>==gi
+" inoremap <c-k> <Esc>:m .-2<CR>==gi
+vnoremap <c-j> :m '>+1<CR>gv=gv
+vnoremap <c-k> :m '<-2<CR>gv=gv
