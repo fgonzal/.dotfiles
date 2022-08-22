@@ -1,6 +1,8 @@
 set sm
 set ai
-set number
+set relativenumber
+set nu
+set rnu
 syntax on
 set hidden
 let java_highlight_all=1
@@ -49,19 +51,21 @@ Plug 'neovim/nvim-lspconfig'
 " Syntax highlight.
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  
 Plug 'preservim/nerdtree'
+
 " Stable version of coc
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-snippets'
 Plug 'tpope/vim-fugitive'
-Plug 'dracula/vim', { 'as': 'dracula' }
 " #Plug 'vim-airline/vim-airline'
 " #Plug 'vim-airline/vim-airline-themes'
 Plug 'tomtom/tcomment_vim'
 
 " Themes
 " Plug 'joshdick/onedark.vim'
-Plug 'gruvbox-community/gruvbox'
-Plug 'luisiacc/gruvbox-baby'
-
+" Plug 'gruvbox-community/gruvbox'
+" Plug 'luisiacc/gruvbox-baby'
+" Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 " telescope
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -69,8 +73,12 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 
 " Harpoon
-Plug 'nvim-lua/plenary.nvim' " don't forget to add this one if you don't have it yet!
+"Plug 'nvim-lua/plenary.nvim' " don't forget to add this one if you don't have it yet!
 Plug 'ThePrimeagen/harpoon'
+
+" Unit tests!
+Plug 'vim-test/vim-test'
+
 call plug#end()
 
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
@@ -78,7 +86,10 @@ command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-hea
 set termguicolors
 " color dracula
 " colorscheme onedark
-colorscheme gruvbox
+" colorscheme gruvbox
+" colorscheme duskfox
+" colorscheme gruvbox-baby
+colorscheme tokyonight
 
 " Quick access to fuzzy finder.
 " nnoremap <silent> <C-f> :FZF<CR>
@@ -89,6 +100,7 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
+" Harpoon.
 nnoremap <silent><leader>ha :lua require("harpoon.mark").add_file()<CR>
 nnoremap <silent><leader>hs :lua require("harpoon.ui").toggle_quick_menu()<CR>
 nnoremap <silent><leader>hu :lua require("harpoon.cmd-ui").toggle_quick_menu()<CR>
@@ -98,31 +110,65 @@ nnoremap <silent><leader>i :lua require("harpoon.ui").nav_file(2)<CR>
 " nnoremap <silent><leader>o :lua require("harpoon.ui").nav_file(3)<CR>
 " nnoremap <silent><leader>p :lua require("harpoon.ui").nav_file(4)<CR>
 
+noremap <c-s-up> :m -2<CR>  
+noremap <c-s-down> :m +1<CR> 
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
 " Status bar
-set laststatus=2
-" set statusline=%f
-set stl+=%{expand('%:~:.')}
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
+
+set statusline=
+set statusline+=%#PmenuSel#
+"set statusline+=%{StatuslineGit()}
+set statusline+=%#LineNr#
+set statusline+=\ %f
+"set statusline+=%m\
+set statusline+=%=
+set statusline+=%#CursorColumn#
+set statusline+=\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\[%{&fileformat}\]
+set statusline+=\ %p%%
+set statusline+=\ %l:%c
+set statusline+=\ 
 
 map <C-n> :NERDTreeToggle<CR>
 
-nmap <leader>- <Plug>AirlineSelectPrevTab
-nmap <leader>= <Plug>AirlineSelectNextTab
-
-autocmd vimenter * ++nested colorscheme gruvbox
+" autocmd vimenter * ++nested colorscheme gruvbox
 autocmd VimEnter * hi Normal ctermbg=NONE guibg=NONE
 highlight Normal     ctermbg=NONE guibg=NONE
 highlight LineNr     ctermbg=NONE guibg=NONE
 highlight SignColumn ctermbg=NONE guibg=NONE
-" let g:airline#extensions#tabline#enabled = 1
 
-" Show a '+' next to file names in the statusline for modified buffers.
-" let g:airline_detect_modified = 0 "if you're sticking the + in section_c you probably want to disable detection
-" function! Init()
-"   call airline#parts#define_raw('modified', '%{&modified ? "+" : ""}')
-"   call airline#parts#define_accent('modified', 'red')
-"   let g:airline_section_c = airline#section#create(['%t', 'modified'])
-" endfunction
-" autocmd VimEnter * call Init()
+nnoremap <leader>lg :lua require('telescope.builtin').live_grep()<CR>
 
 " External files.
 source $HOME/.config/nvim/plug-config/coc.vim
+
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <C-x><C-z> coc#pum#visible() ? coc#pum#stop() : "\<C-x>\<C-z>"
+inoremap <silent><expr> <c-space> coc#refresh()
+
+hi CocSearch ctermfg=12 guifg=#18A3FF
+hi CocMenuSel ctermbg=109 guibg=#13354A
