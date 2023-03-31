@@ -36,7 +36,7 @@ set smartcase
 set incsearch
 
 " Change the direction of new splits.
-set splitbelow
+" set splitbelow
 set splitright
 
 set clipboard=unnamedplus
@@ -66,13 +66,17 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-snippets'
 Plug 'tpope/vim-fugitive'
 Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-rhubarb'
 
 " Themes
 " Plug 'joshdick/onedark.vim'
 " Plug 'gruvbox-community/gruvbox'
 " Plug 'luisiacc/gruvbox-baby'
 " Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
-Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+" Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'rose-pine/neovim'
+
 " telescope
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -96,9 +100,7 @@ set termguicolors
 " colorscheme gruvbox
 " colorscheme duskfox
 " colorscheme gruvbox-baby
-colorscheme tokyonight
-
-" Quick access to fuzzy finder.
+" colorscheme tokyonight
 " nnoremap <silent> <C-f> :FZF<CR>
 
 " Find files using Telescope command-line sugar.
@@ -194,3 +196,29 @@ nnoremap <c-k> :m .-2<CR>==
 " inoremap <c-k> <Esc>:m .-2<CR>==gi
 vnoremap <c-j> :m '>+1<CR>gv=gv
 vnoremap <c-k> :m '<-2<CR>gv=gv
+
+highlight ColorColumn ctermbg=0 guibg=gray4
+highlight WinSeparator guibg=None 
+
+lua << EOF
+require("catppuccin").setup {
+    -- flavour = "macchiato" -- mocha, macchiato, frappe, latte
+    flavour = "mocha",
+    color_overrides = {
+        mocha = {
+            base = "#000000",
+        }
+    },
+    integrations = {
+        nvimtree = true,
+    },
+    custom_highlights = {
+        NvimTreeNormal = { bg = "NONE" },
+    }
+}
+EOF
+colorscheme catppuccin
+
+highlight Conditional cterm=NONE gui=NONE guifg=#cba6f7 
+highlight Comment cterm=NONE gui=NONE guifg=#585b70 
+
