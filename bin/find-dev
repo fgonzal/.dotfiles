@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function findDev() {
+    if [[ $# -eq 1 ]]; then
+        selected=$1
+    else
+        selected=$(find ~/Documents/GitHub -mindepth 2 -maxdepth 2 -type d | fzf)
+    fi
+
+    if [[ -z $selected ]]; then
+        return
+    fi
+    cd $selected
+    v .
+}
