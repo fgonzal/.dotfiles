@@ -41,7 +41,7 @@ set splitright
 
 set clipboard=unnamedplus
 set background=dark
-nnoremap <SPACE> <Nop>
+nnoremap <SPACE> <Nop> 
 let mapleader = " "
 
 " Make sure vim-plug is installed.
@@ -59,6 +59,7 @@ Plug 'neovim/nvim-lspconfig'
 " Plug 'junegunn/fzf.vim'
 " Syntax highlight.
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  
+Plug 'nvim-treesitter/playground'
 Plug 'preservim/nerdtree'
 
 " Stable version of coc
@@ -75,7 +76,6 @@ Plug 'tpope/vim-rhubarb'
 " Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
 " Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-Plug 'rose-pine/neovim'
 
 " telescope
 Plug 'nvim-lua/popup.nvim'
@@ -104,15 +104,20 @@ set termguicolors
 " nnoremap <silent> <C-f> :FZF<CR>
 
 " Find files using Telescope command-line sugar.
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>ff <cmd>Telescope git_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep glob_pattern=!*{log,sql,_r,_s}<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+nmap <silent> <leader>tt :TestNearest<CR>
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+" nmap <silent> <leader>g :TestVisit<CR>
 
 " Harpoon.
 nnoremap <silent><leader>ha :lua require("harpoon.mark").add_file()<CR>
 nnoremap <silent><leader>hs :lua require("harpoon.ui").toggle_quick_menu()<CR>
-nnoremap <silent><leader>hu :lua require("harpoon.cmd-ui").toggle_quick_menu()<CR>
 
 nnoremap <silent><leader>u :lua require("harpoon.ui").nav_file(1)<CR>
 nnoremap <silent><leader>i :lua require("harpoon.ui").nav_file(2)<CR>
@@ -137,41 +142,17 @@ let g:coc_snippet_prev = '<c-k>'
 " Use <C-j> for both expand and jump (make expand higher priority.)
 imap <C-j> <Plug>(coc-snippets-expand-jump)
 
-" Status bar
-function! GitBranch()
-  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
-endfunction
-
-function! StatuslineGit()
-  let l:branchname = GitBranch()
-  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
-endfunction
-
-set statusline=
-set statusline+=%#PmenuSel#
-"set statusline+=%{StatuslineGit()}
-set statusline+=%#LineNr#
-set statusline+=\ %f
-"set statusline+=%m\
-set statusline+=%=
-set statusline+=%#CursorColumn#
-set statusline+=\ %y
-set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-set statusline+=\[%{&fileformat}\]
-set statusline+=\ %p%%
-set statusline+=\ %l:%c
-set statusline+=\ 
-
 map <C-n> :NERDTreeToggle<CR>
-
 
 " autocmd vimenter * ++nested colorscheme gruvbox
 autocmd VimEnter * hi Normal ctermbg=NONE guibg=NONE
+
+" Do not show line numbers in terminal mode.
+autocmd TermOpen * setlocal nonumber norelativenumber
+
 highlight Normal     ctermbg=NONE guibg=NONE
 highlight LineNr     ctermbg=NONE guibg=NONE
 highlight SignColumn ctermbg=NONE guibg=NONE
-
-nnoremap <leader>lg :lua require('telescope.builtin').live_grep()<CR>
 
 " External files.
 source $HOME/.config/nvim/plug-config/coc.vim
@@ -197,8 +178,16 @@ nnoremap <c-k> :m .-2<CR>==
 vnoremap <c-j> :m '>+1<CR>gv=gv
 vnoremap <c-k> :m '<-2<CR>gv=gv
 
-highlight ColorColumn ctermbg=0 guibg=gray4
-highlight WinSeparator guibg=None 
+" Center screen when looping through search results.
+cnoremap <expr> <CR> getcmdtype() =~ '[/?]' ? '<CR>zz' : '<CR>'
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Center screen when scrooling full pages.
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+inoremap <C-c> <Esc>
 
 lua << EOF
 require("catppuccin").setup {
@@ -219,6 +208,35 @@ require("catppuccin").setup {
 EOF
 colorscheme catppuccin
 
+highlight WinSeparator guibg=None 
+highlight ColorColumn ctermbg=0 guibg=#080808
+
 highlight Conditional cterm=NONE gui=NONE guifg=#cba6f7 
 highlight Comment cterm=NONE gui=NONE guifg=#585b70 
 
+lua << EOF
+local function status_line()
+  local mode = "%-5{%v:lua.string.upper(v:lua.vim.fn.mode())%}"
+  local file_name = "%-.25t"
+  local modified = " %-m"
+  local coc = "%30{coc#status()}"
+  local file_type = " %y"
+  local right_align = "%="
+  local line_no = "%13([%c:%l/%L%)]"
+  local pct_thru_file = "%5p%%"
+
+  return string.format(
+    "%s%s%s%s%s%s%s%s",
+    mode,
+    file_name,
+    modified,
+    coc,
+    right_align,
+    file_type,
+    line_no,
+    pct_thru_file
+  )
+end
+
+vim.opt.statusline = status_line()
+EOF
