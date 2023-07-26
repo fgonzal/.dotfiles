@@ -10,11 +10,10 @@ let java_highlight_functions="style"
 let java_allow_cpp_keywords=1
 set complete=.,w,b,u,t,i
 set ts=4
-set sts=4
 set sw=4
+set sts=4
 set expandtab
 set ttyfast                 " Speed up scrolling in Vim
-set cursorline
 set mouse=a                 " enable mouse click
 set cursorline              " highlight current cursorline
 set cc=100                  " set an 100 column border for good coding style
@@ -104,8 +103,9 @@ set termguicolors
 " nnoremap <silent> <C-f> :FZF<CR>
 
 " Find files using Telescope command-line sugar.
-nnoremap <leader>ff <cmd>Telescope git_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep glob_pattern=!*{log,sql,_r,_s}<cr>
+nnoremap <leader>fp <cmd>Telescope git_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep glob_pattern=!*{log*,gz,sql,_r,_s}<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
@@ -216,25 +216,23 @@ highlight Comment cterm=NONE gui=NONE guifg=#585b70
 
 lua << EOF
 local function status_line()
-  local mode = "%-5{%v:lua.string.upper(v:lua.vim.fn.mode())%}"
+  local mode = " %-5{%v:lua.string.upper(v:lua.vim.fn.mode())%}"
   local file_name = "%-.25t"
   local modified = " %-m"
   local coc = "%30{coc#status()}"
   local file_type = " %y"
   local right_align = "%="
-  local line_no = "%13([%c:%l/%L%)]"
-  local pct_thru_file = "%5p%%"
+  local line_no = "%13(%c:%l/%L%) "
 
   return string.format(
-    "%s%s%s%s%s%s%s%s",
+    "%s%s%s%s%s%s%s",
     mode,
     file_name,
     modified,
     coc,
     right_align,
     file_type,
-    line_no,
-    pct_thru_file
+    line_no
   )
 end
 
