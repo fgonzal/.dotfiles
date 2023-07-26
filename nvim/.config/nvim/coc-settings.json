@@ -3,7 +3,7 @@
 	"suggest.noselect": false,
 	"suggest.minTriggerInputLength": 2,
 	"suggest.acceptSuggestionOnCommitCharacter": true,
-	"suggest.snippetIndicator": "►",
+	"suggest.snippetIndicator": "?",
 
 	"tsserver.enable": true,
 	"tsserver.formatOnType": false,
@@ -37,11 +37,23 @@
 
 	"coc.preferences.formatOnSaveFiletypes": ["css"],
 	"coc.preferences.snippets.enable": true,
+        "inlayHint.enable": false,
 	"diagnostic.messageTarget": "float",
 	"suggest.floatEnable": true,
 	"signature.target": "preview",
 	"coc.preferences.hoverTarget": "echo",
-        "java.home": "/Users/fgonzalez/.sdkman/candidates/java/11.0.2-open",
 	"java.import.gradle.enabled": true,
-	"java.import.gradle.wrapper.enabled": true
+	"java.import.gradle.wrapper.enabled": true,
+        "java.import.exclusions": [
+        "**/bin/**",
+        "**/build/**",
+        "**/node_modules/**",
+        "**/.metadata/**",
+        "**/archetype-resources/**",
+        "**/META-INF/maven/**"
+    ],
+    "java.home": "/Users/fgonzalez/.sdkman/candidates/java/17.0.4-amzn",
+    "java.jdt.ls.java.home": "/Users/fgonzalez/.sdkman/candidates/java/17.0.4-amzn",
+    "java.import.gradle.java.home": "/Users/fgonzalez/.sdkman/candidates/java/8.322.06.1-amzn"
 }
+
