@@ -11,5 +11,8 @@ function findDev() {
         return
     fi
     cd $selected
+    if test -f ".sdkmanrc"; then
+        sdk env
+    fi
     v .
 }
