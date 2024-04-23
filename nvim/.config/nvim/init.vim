@@ -20,6 +20,8 @@ set cc=100                  " set an 100 column border for good coding style
 set linespace=3
 set wildmode=longest,list,full
 set wildmenu
+set scrolloff=10
+
 " Ignore files
 set wildignore+=*_build/*
 set wildignore+=**/coverage/*
