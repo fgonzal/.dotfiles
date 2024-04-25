@@ -29,8 +29,8 @@ set wildignore+=**/.git/*
 
 set backupdir=~/.config/nvim/backup//
 set directory=~/.config/nvim/swap//
-set undodir=~/.config/nvim/undo//
 
+set undodir=~/.config/nvim/undo//
 " Use smartcase when searching within a file.
 set ignorecase
 set smartcase
@@ -77,6 +77,8 @@ Plug 'tpope/vim-rhubarb'
 " Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
 " Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+" Plug 'rose-pine/neovim', { 'as': 'rosepine' }
+Plug 'Shatur/neovim-ayu', { 'as': 'ayu' }
 
 " telescope
 Plug 'nvim-lua/popup.nvim'
@@ -90,6 +92,9 @@ Plug 'ThePrimeagen/harpoon'
 
 " Unit tests!
 Plug 'vim-test/vim-test'
+
+" Codeium
+Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 
 call plug#end()
 
@@ -173,19 +178,19 @@ hi CocSearch ctermfg=12 guifg=#18A3FF
 hi CocMenuSel ctermbg=109 guibg=#13354A
 
 " Remaps to move lines around.
-nnoremap <c-j> :m .+1<CR>==
-nnoremap <c-k> :m .-2<CR>==
+nnoremap J :m .+1<CR>==
+nnoremap K :m .-2<CR>==
 " inoremap <c-j> <Esc>:m .+1<CR>==gi
 " inoremap <c-k> <Esc>:m .-2<CR>==gi
-vnoremap <c-j> :m '>+1<CR>gv=gv
-vnoremap <c-k> :m '<-2<CR>gv=gv
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 
 " Center screen when looping through search results.
 cnoremap <expr> <CR> getcmdtype() =~ '[/?]' ? '<CR>zz' : '<CR>'
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-" Center screen when scrooling full pages.
+" Center screen when scrolling full pages.
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
 
@@ -195,19 +200,33 @@ lua << EOF
 require("catppuccin").setup {
     -- flavour = "macchiato" -- mocha, macchiato, frappe, latte
     flavour = "mocha",
+    no_italic = true,
     color_overrides = {
         mocha = {
             base = "#000000",
         }
     },
     integrations = {
+        telescope = {
+            enabled = true,
+            -- style = "nvchad"
+        },
         nvimtree = true,
+        treesitter = true, 
+        harpoon = true
     },
     custom_highlights = {
         NvimTreeNormal = { bg = "NONE" },
     }
 }
+require("nvim-treesitter.configs").setup {
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false
+    },
+}
 EOF
+
 colorscheme catppuccin
 
 highlight WinSeparator guibg=None 
