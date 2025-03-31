@@ -52,8 +52,9 @@
         "**/archetype-resources/**",
         "**/META-INF/maven/**"
     ],
-    "java.home": "/Users/fgonzalez/.sdkman/candidates/java/17.0.4-amzn",
-    "java.jdt.ls.java.home": "/Users/fgonzalez/.sdkman/candidates/java/17.0.4-amzn",
-    "java.import.gradle.java.home": "/Users/fgonzalez/.sdkman/candidates/java/8.322.06.1-amzn"
+    "java.home": "/Users/fgonzal/.sdkman/candidates/java/17.0.4-amzn",
+    "java.jdt.ls.java.home": "/Users/fgonzal/.sdkman/candidates/java/23.0.2-amzn",
+    "java.jdt.ls.home": "/Users/fgonzal/.local/jdt-language-server-1.47.0-202503272103",
+    "java.import.gradle.java.home": "/Users/fgonzal/.sdkman/candidates/java/8.0.392-amzn",
+    "snippets.ultisnips.pythonPrompt": false
 }
-
