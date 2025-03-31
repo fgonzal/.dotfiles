@@ -1,0 +1,17 @@
+# General UI
+theme = Hurtado
+shell-integration-features = no-cursor,sudo,no-title
+cursor-style = block
+adjust-cell-height = 10%
+
+# Fonts
+font-size = 20
+font-family = "JetBrains Mono"
+font-style = medium
+font-feature = -calt, -liga, -dlig
+
+# Window
+window-save-state = always
+
+# macOS
+macos-titlebar-style = tabs
