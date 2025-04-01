@@ -52,6 +52,7 @@
         "**/archetype-resources/**",
         "**/META-INF/maven/**"
     ],
+    "java.format.settings.url": "https://raw.githubusercontent.com/fgonzal/.dotfiles/main/VSCode/java-formatter.xml",
     "java.home": "/Users/fgonzal/.sdkman/candidates/java/17.0.4-amzn",
     "java.jdt.ls.java.home": "/Users/fgonzal/.sdkman/candidates/java/23.0.2-amzn",
     "java.jdt.ls.home": "/Users/fgonzal/.local/jdt-language-server-1.47.0-202503272103",
