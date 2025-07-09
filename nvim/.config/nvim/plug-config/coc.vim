@@ -164,6 +164,4 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
-let g:coc_node_path = '/usr/local/bin/node'
-
-
+let g:coc_node_path = '/opt/homebrew/bin/node'
