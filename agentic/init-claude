@@ -2,7 +2,7 @@
 set -euo pipefail
 
 DEST="./CLAUDE.md"
-URL="https://raw.githubusercontent.com/fgonzal/.dotfiles/refs/heads/main/agentic/CLAUDE.md"
+URL="https://raw.githubusercontent.com/fgonzal/.dotfiles/refs/heads/main/agentic/CLAUDE.md?$(date +%s)"
 
 if [[ -e "$DEST" ]]; then
   echo "Error: CLAUDE.md already exists in the current directory." >&2
