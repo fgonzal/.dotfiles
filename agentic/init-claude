@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DEST="./CLAUDE.md"
+URL="https://raw.githubusercontent.com/fgonzal/.dotfiles/refs/heads/main/agentic/CLAUDE.md"
+
+if [[ -e "$DEST" ]]; then
+  echo "Error: CLAUDE.md already exists in the current directory." >&2
+  exit 1
+fi
+
+curl -fsSL "$URL" -o "$DEST"
+echo "CLAUDE.md downloaded to $DEST"
