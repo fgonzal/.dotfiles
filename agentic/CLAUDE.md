@@ -10,3 +10,7 @@
 
 - Single-line paragraphs in all markdown files and PR content — no multi-line wrapped paragraphs.
 - No extensions on executable scripts.
+
+## Project structure
+
+TODO
