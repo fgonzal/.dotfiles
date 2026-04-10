@@ -1,6 +1,7 @@
 ## Rule: commit messages
 
 - To comply with licensing requirements and maintain clear authorship records, please **do not include "Co-Authored-By" or similar AI attribution tags** in commit messages. Commits should reflect only human authorship through standard Git author fields.
+- Capitalize the first letter of the subject line.
 
 ## Rule: pull requests
 
