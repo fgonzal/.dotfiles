@@ -6,7 +6,8 @@
 ## Rule: pull requests
 
 - PR descriptions must include a plain-language paragraph at the top of the Summary section explaining the change in terms a non-coder can understand.
-
+- Always share PR descriptions in raw markdown so the user can copy and paste them directly.
+ 
 ## Rule: code style
 
 - Single-line paragraphs in all markdown files and PR content — no multi-line wrapped paragraphs.
