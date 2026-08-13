@@ -58,12 +58,16 @@ Plug 'neovim/nvim-lspconfig'
 " Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " Plug 'junegunn/fzf.vim'
 " Syntax highlight.
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  
+Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'master', 'do': ':TSUpdate'}  
+" Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'master'}  
 Plug 'nvim-treesitter/playground'
 Plug 'preservim/nerdtree'
 
 " Stable version of coc
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'mfussenegger/nvim-jdtls'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'neoclide/coc-snippets'
 Plug 'tpope/vim-fugitive'
 Plug 'tomtom/tcomment_vim'
@@ -86,6 +90,7 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
+Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'fannheyward/telescope-coc.nvim'
 
 " Harpoon
@@ -121,6 +126,17 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fo <cmd>Telescope coc document_symbols<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+let g:test#strategy = 'neovim'
+let g:test#neovim#term_position = 'belowright'
+let g:test#java#runner = 'gradletest'
+
+" Override Java patterns to handle 'public final/abstract class' declarations.
+" The default pattern only matches 'public class', missing the extra modifier.
+let g:test#java#patterns = {
+  \ 'test':      ['\v^\s*%(\zs\@Test\s+\ze)?%(\zspublic\s+\ze)?void\s+(\w+)'],
+  \ 'namespace': ['\v^\s*%(public\s+|protected\s+|private\s+)?%(final\s+|abstract\s+)?class\s+(\w+)'],
+  \ }
 
 nmap <silent> <leader>tt :TestNearest<CR>
 nmap <silent> <leader>tf :TestFile<CR>
@@ -163,8 +179,14 @@ map <C-n> :NERDTreeToggle<CR>
 " autocmd vimenter * ++nested colorscheme gruvbox
 autocmd VimEnter * hi Normal ctermbg=NONE guibg=NONE
 
+" ESC to get out of insert mode in terminal buffers.
+tnoremap <Esc> <C-\><C-n>
+
 " Do not show line numbers in terminal mode.
 autocmd TermOpen * setlocal nonumber norelativenumber
+
+" Disable coc for Java — handled by nvim-jdtls instead.
+autocmd FileType java let b:coc_enabled = 0
 
 highlight Normal     ctermbg=NONE guibg=NONE
 highlight LineNr     ctermbg=NONE guibg=NONE
@@ -343,8 +365,11 @@ require('telescope').setup{
       }
     },
   }, -- defaults
-...
+  extensions = {
+    ["ui-select"] = { require("telescope.themes").get_dropdown() },
+  },
 } -- telescope setup
+require("telescope").load_extension("ui-select")
 
 vim.opt.statusline = status_line()
 EOF

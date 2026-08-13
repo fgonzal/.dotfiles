@@ -1,0 +1,41 @@
+# Portable ghostty config. Copy to ~/.config/ghostty/config
+#
+# Anything host-specific belongs in config.local next to it, NOT here --
+# it is loaded after this file (see the bottom) and overrides these values.
+
+# General UI
+theme = Hurtado
+shell-integration-features = no-cursor,sudo,no-title
+cursor-style = block
+adjust-cell-height = 10%
+background-opacity = 1
+
+# Fonts
+# font-family left unset on purpose: archwork uses ghostty's default. Set it
+# per-host in config.local if a machine needs a specific face.
+font-style = Medium
+font-feature = -calt, -liga, -dlig
+
+# Window
+window-save-state = always
+
+# Input
+mouse-scroll-multiplier = 1.50
+keybind = alt+h=goto_split:left
+keybind = alt+l=goto_split:right
+
+# Palette overrides -- must come after `theme` to take precedence.
+# Hurtado ships ANSI red at #ff1b00 (fully saturated) / #d51d00, which makes
+# every syntax-highlighted string literal read as an error. Desaturated and
+# darkened here; green nudged to match so diff +/- stay balanced.
+palette = 1=#c05a4e
+palette = 9=#d47a6e
+palette = 2=#8fae63
+palette = 10=#9cbb72
+
+# macOS only, ignored elsewhere
+macos-titlebar-style = tabs
+
+# Host-specific overrides. The `?` makes it optional, so a machine without
+# the file still starts cleanly.
+config-file = ?config.local
