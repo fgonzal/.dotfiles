@@ -19,8 +19,25 @@ cmp.setup.filetype('java', {
     }),
 })
 
-local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
-local workspace_dir = home .. '/.local/share/jdtls/workspaces/' .. project_name
+-- Marker order matters: find_root stops at the FIRST ancestor containing any
+-- listed marker. `build.gradle` used to be in this list, so in a multi-module
+-- build it matched modules/<name>/build.gradle and rooted jdtls at the
+-- submodule — importing it without the rest of the project, which reads as
+-- "LSP not working" (no cross-module navigation, half the classpath missing).
+-- settings.gradle exists once, at the root, and never in a submodule.
+local root_dir = require('jdtls.setup').find_root({
+    'settings.gradle', 'settings.gradle.kts', 'gradlew', 'mvnw', 'pom.xml', '.git',
+}) or vim.fn.getcwd()
+
+-- Workspace name is derived from the resolved ROOT, not from getcwd(). getcwd()
+-- meant launching nvim from a subdirectory created a second workspace for the
+-- same project, and worktrees sharing a basename collided. The path hash also
+-- makes stale caches self-healing: change the markers above and the root moves,
+-- the name changes with it, and the old workspace is simply never read again
+-- rather than silently serving a bad import.
+local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
+local workspace_dir = home .. '/.local/share/jdtls/workspaces/'
+    .. project_name .. '-' .. vim.fn.sha256(root_dir):sub(1, 8)
 
 local config = {
     cmd = {
@@ -36,7 +53,7 @@ local config = {
         '-configuration', home .. '/.local/share/jdtls/config_linux',
         '-data', workspace_dir,
     },
-    root_dir = require('jdtls.setup').find_root({ 'gradlew', 'build.gradle', '.git', 'pom.xml' }),
+    root_dir = root_dir,
     on_exit = function(code, signal)
         if code == 13 then
             vim.schedule(function()
@@ -152,3 +169,16 @@ local config = {
 }
 
 jdtls.start_or_attach(config)
+
+-- :JdtlsResetWorkspace — nuke this project's cached import and restart. The
+-- hashed name above makes stale caches self-heal when the root moves, but a
+-- workspace can still corrupt in place (jdtls exits 13, handled in on_exit) or
+-- go stale after a large dependency change.
+vim.api.nvim_buf_create_user_command(0, 'JdtlsResetWorkspace', function()
+    for _, client in ipairs(vim.lsp.get_clients({ name = 'jdtls' })) do
+        client:stop()
+    end
+    vim.fn.delete(workspace_dir, 'rf')
+    vim.notify('jdtls: workspace cleared (' .. workspace_dir .. ')\nRun :e to re-import.',
+        vim.log.levels.INFO)
+end, { desc = 'Delete this project\'s jdtls workspace and restart the server' })

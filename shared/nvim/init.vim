@@ -63,12 +63,13 @@ Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'master', 'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 Plug 'preservim/nerdtree'
 
-" Stable version of coc
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mfussenegger/nvim-jdtls'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'neoclide/coc-snippets'
+" Fallback completion sources for buffers with no language server — coc did
+" word completion out of the box, these replace it.
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
 Plug 'tpope/vim-fugitive'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-rhubarb'
@@ -91,7 +92,6 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'nvim-telescope/telescope-ui-select.nvim'
-Plug 'fannheyward/telescope-coc.nvim'
 
 " Harpoon
 "Plug 'nvim-lua/plenary.nvim' " don't forget to add this one if you don't have it yet!
@@ -124,7 +124,7 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 " nnoremap <leader>fg <cmd>Telescope live_grep glob_pattern=!*{log*,gz,_r,_s}<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fo <cmd>Telescope coc document_symbols<cr>
+nnoremap <leader>fo <cmd>Telescope lsp_document_symbols<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 let g:test#strategy = 'neovim'
@@ -159,21 +159,6 @@ noremap <c-s-down> :m +1<CR>
 " reselect pasted text
 nnoremap gp `[v`]
 
-" Use <C-l> for trigger snippet expand.
-imap <C-l> <Plug>(coc-snippets-expand)
-
-" Use <C-j> for select text for visual placeholder of snippet.
-vmap <C-j> <Plug>(coc-snippets-select)
-
-" Use <C-j> for jump to next placeholder, it's default of coc.nvim
-let g:coc_snippet_next = '<c-j>'
-
-" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<c-k>'
-
-" Use <C-j> for both expand and jump (make expand higher priority.)
-imap <C-j> <Plug>(coc-snippets-expand-jump)
-
 map <C-n> :NERDTreeToggle<CR>
 
 " autocmd vimenter * ++nested colorscheme gruvbox
@@ -185,28 +170,16 @@ tnoremap <Esc> <C-\><C-n>
 " Do not show line numbers in terminal mode.
 autocmd TermOpen * setlocal nonumber norelativenumber
 
-" Disable coc for Java — handled by nvim-jdtls instead.
-autocmd FileType java let b:coc_enabled = 0
-
 highlight Normal     ctermbg=NONE guibg=NONE
 highlight LineNr     ctermbg=NONE guibg=NONE
 highlight SignColumn ctermbg=NONE guibg=NONE
 
 " External files.
-source $HOME/.config/nvim/plug-config/coc.vim
-
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-inoremap <silent><expr> <C-x><C-z> coc#pum#visible() ? coc#pum#stop() : "\<C-x>\<C-z>"
-" remap for complete to use tab and <cr>
-" inoremap <silent><expr> <TAB>
-"             \ coc#pum#visible() ? coc#pum#next(1):
-"             \ <SID>check_back_space() ? "\<Tab>" :
-"             \ coc#refresh()
-" inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent><expr> <c-space> coc#refresh()
-
-hi CocSearch ctermfg=12 guifg=#18A3FF
-hi CocMenuSel ctermbg=109 guibg=#13354A
+" Diagnostics used to shift text as they appeared; coc.vim set this and the
+" LSP config still relies on it.
+set signcolumn=number
+set updatetime=300
+luafile $HOME/.config/nvim/plug-config/lsp.lua
 
 " Remaps to move lines around.
 nnoremap <C-j> :m .+1<CR>==
@@ -323,17 +296,15 @@ local function status_line()
   local mode = " %-5{%v:lua.string.upper(v:lua.vim.fn.mode())%}"
   local file_name = "%-.25t"
   local modified = " %-m"
-  local coc = "%30{coc#status()}"
   local file_type = " %y"
   local right_align = "%="
   local line_no = "%13(%c:%l/%L%) "
 
   return string.format(
-    "%s%s%s%s%s%s%s",
+    "%s%s%s%s%s%s",
     mode,
     file_name,
     modified,
-    coc,
     right_align,
     file_type,
     line_no
@@ -355,14 +326,6 @@ require('telescope').setup{
     }, -- mappings
     preview = {
       hide_on_startup = true -- hide previewer when picker starts
-    },
-    extensions = {
-      coc = {
-          theme = 'ivy',
-          prefer_locations = true, -- always use Telescope locations to preview definitions/declarations/implementations etc
-          push_cursor_on_edit = true, -- save the cursor position to jump back in the future
-          timeout = 3000, -- timeout for coc commands
-      }
     },
   }, -- defaults
   extensions = {
