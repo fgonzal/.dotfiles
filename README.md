@@ -18,6 +18,7 @@ Find the hostname with `hostnamectl hostname`.
 | ------------------------------------------ | -------------------------------- |
 | `hosts/archwork/ghostty/config.local`       | `~/.config/ghostty/config.local` |
 | `hosts/archwork/hypr/monitors.conf`         | `~/.config/hypr/monitors.conf`   |
+| `hosts/archwork/hypr/hyprland.conf`         | `~/.config/hypr/hyprland.conf`   |
 | `hosts/macbook/bash/.bash_profile`          | `~/.bash_profile`                |
 
 `shared/ghostty/config` ends with `config-file = ?config.local`, which ghostty
